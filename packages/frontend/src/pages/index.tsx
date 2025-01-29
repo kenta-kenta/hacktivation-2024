@@ -1,8 +1,9 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import { NFTManager } from '../components/nft';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import type { NextPage } from "next";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { NFTManager } from "../components/nft";
+import ImageNft from "../components/ImageNft";
 
 const Home: NextPage = () => {
   return (
@@ -20,11 +21,12 @@ const Home: NextPage = () => {
         <ConnectButton />
 
         <h1 className={styles.title}>
-          Welcome to <a href="">RainbowKit</a> + <a href="">wagmi</a> +{' '}
+          Welcome to <a href="">RainbowKit</a> + <a href="">wagmi</a> +{" "}
           <a href="https://nextjs.org">Next.js!</a>
         </h1>
         <div className={styles.grid}>
-        <NFTManager/>
+          <NFTManager />
+          <ImageNft />
         </div>
 
         <div className={styles.grid}>
