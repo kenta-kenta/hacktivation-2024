@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import { create } from "ipfs-http-client";
-import { BrowserProvider, ethers } from "ethers";
+import { BrowserProvider } from "ethers";
 import nftAbi from "../ABI/MyNFT.json";
 
-// ローカルIPFSノードの設定
+// InfuraのAPIキーのみを使用
+const apiKey = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+
+if (!apiKey) {
+  throw new Error("Infura API Keyが設定されていません");
+}
+
 const ipfs = create({
-  host: "localhost",
+  host: "ipfs.infura.io",
   port: 5001,
-  protocol: "http",
+  protocol: "https",
+  headers: {
+    authorization: `Bearer ${apiKey}`,
+  },
 });
 
 interface NFTMetadata {
@@ -18,15 +27,17 @@ interface NFTMetadata {
 
 const uploadToIPFS = async (file: File): Promise<string> => {
   try {
-    // ファイルサイズのチェック
     if (file.size > 10 * 1024 * 1024) {
-      // 10MB制限
-      throw new Error("File size too large");
+      throw new Error("ファイルサイズが大きすぎます（上限: 10MB）");
     }
 
-    const added = await ipfs.add(file);
-    const imageURI = `ipfs://${added.path}`;
+    console.log("アップロード開始...");
+    const added = await ipfs.add(file, {
+      progress: (prog) => console.log(`アップロード進捗: ${prog}`),
+    });
+    console.log("ファイルアップロード完了:", added.path);
 
+    const imageURI = `ipfs://${added.path}`;
     const metadata: NFTMetadata = {
       name: "My NFT",
       description: "My NFT Description",
@@ -34,10 +45,12 @@ const uploadToIPFS = async (file: File): Promise<string> => {
     };
 
     const metadataAdded = await ipfs.add(JSON.stringify(metadata));
+    console.log("メタデータアップロード完了:", metadataAdded.path);
+
     return `ipfs://${metadataAdded.path}`;
   } catch (error) {
-    console.error("Error uploading to IPFS:", error);
-    throw new Error("Failed to upload to IPFS");
+    console.error("IPFSアップロードエラー:", error);
+    throw new Error("IPFSへのアップロードに失敗しました");
   }
 };
 

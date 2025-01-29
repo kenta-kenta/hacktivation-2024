@@ -5,7 +5,7 @@ import nftAbi from "../ABI/MyNFT.json";
 export const useNFTContract = () => {
     const { address } = useAccount();
 
-    const nftAddress = "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0";
+    const nftAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 
     // Read NFT balance with error handling
     const { data: nftBalance, isError: isBalanceError, isLoading: isBalanceLoading, error } = useReadContract({

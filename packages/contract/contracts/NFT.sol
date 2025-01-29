@@ -2,9 +2,11 @@
 pragma solidity ^0.8.0;
 
 contract MyNFT {
+    // Token name
     string public name;
     string public symbol;
 
+    // 変数の宣言
     mapping(uint256 => address) private _owners;
     mapping(address => uint256) private _balances;
     mapping(uint256 => string) private _tokenURIs;
