@@ -14,8 +14,10 @@ contract MyNFT {
     uint256 private _tokenIds;
 
     struct TextNFTMetadata {
+        uint256 tokenId;
         string text;
         uint256 timestamp;
+        string[] tags;
     }
 
     mapping(uint256 => TextNFTMetadata) private _textMetadata;
@@ -124,7 +126,8 @@ contract MyNFT {
 
     function mintTextNFT(
         address to,
-        string memory text
+        string memory text,
+        string[] memory tags
     ) public returns (uint256) {
         require(to != address(0), "Cannot mint to the zero address");
         require(bytes(text).length > 0, "Text cannot be empty");
@@ -137,8 +140,10 @@ contract MyNFT {
 
         // テキストメタデータの保存
         _textMetadata[newTokenId] = TextNFTMetadata({
+            tokenId: newTokenId,
             text: text,
-            timestamp: block.timestamp
+            timestamp: block.timestamp,
+            tags: tags
         });
 
         emit Transfer(address(0), to, newTokenId);
@@ -183,6 +188,20 @@ contract MyNFT {
         }
 
         return textNFTs;
+    }
+
+    function transferTextNFT(address from, address to, uint256 tokenId) public {
+        require(to != address(0), "Cannot transfer to zero address");
+        require(_owners[tokenId] == from, "Not the owner of the token");
+        require(from == msg.sender, "Not authorized to transfer");
+
+        // 所有権の更新
+        _owners[tokenId] = to;
+        _balances[from] -= 1;
+        _balances[to] += 1;
+
+        // イベントの発行
+        emit Transfer(from, to, tokenId);
     }
 
     function _approve(address to, uint256 tokenId) internal {

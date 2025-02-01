@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import nftAbi from "../ABI/MyNFT.json";
-import { text } from "stream/consumers";
 
 interface TextNFTMetadata {
+  tokenId: number;
   text: string;
+  tags: string[];
   title: string;
   timestamp: number;
 }
@@ -42,13 +43,13 @@ export const useNFTContract = () => {
     init();
   }, []);
 
-  const mintTextNFT = async (text: string) => {
+  const mintTextNFT = async (text: string, tags: string[]) => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(nftAddress, nftAbi, signer);
       
-      const tx = await contract.mintTextNFT(address, text);
+      const tx = await contract.mintTextNFT(address, text, tags);
       const receipt = await tx.wait();
       
       const event = receipt.logs[0];
@@ -79,6 +80,33 @@ export const useNFTContract = () => {
     }
   }
 
+  const transferTextNFT = async (to: string, tokenId: number) => {
+    if (!window.ethereum) {
+      throw new Error("MetaMaskが必要です");
+    }
+  
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const fromAddress = await signer.getAddress();
+      const contract = new ethers.Contract(nftAddress, nftAbi, signer);
+      console.log(fromAddress, to, tokenId);
+            
+      const tx = await contract.transferTextNFT(
+        fromAddress,
+        to,
+        tokenId
+      );
+      
+      const receipt = await tx.wait();
+      return receipt;
+      
+    } catch (error) {
+      console.error("Transfer error:", error);
+      throw new Error("転送に失敗しました");
+    }
+  }
+
   return {
     address,
     balance,
@@ -86,6 +114,7 @@ export const useNFTContract = () => {
     error,
     mintTextNFT,
     getOwnedTextNFTs,
+    transferTextNFT,
     textNFTs,
     currentTokenId
   };
