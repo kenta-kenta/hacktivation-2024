@@ -13,9 +13,28 @@ contract MyNFT {
 
     uint256 private _tokenIds;
 
-    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
-    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+    struct TextNFTMetadata {
+        string text;
+        uint256 timestamp;
+    }
+
+    mapping(uint256 => TextNFTMetadata) private _textMetadata;
+
+    event Transfer(
+        address indexed from,
+        address indexed to,
+        uint256 indexed tokenId
+    );
+    event Approval(
+        address indexed owner,
+        address indexed approved,
+        uint256 indexed tokenId
+    );
+    event ApprovalForAll(
+        address indexed owner,
+        address indexed operator,
+        bool approved
+    );
 
     constructor() {
         name = "MyNFT";
@@ -41,7 +60,10 @@ contract MyNFT {
     function approve(address to, uint256 tokenId) public {
         address owner = ownerOf(tokenId);
         require(to != owner, "Approval to current owner");
-        require(msg.sender == owner || isApprovedForAll(owner, msg.sender), "Not authorized");
+        require(
+            msg.sender == owner || isApprovedForAll(owner, msg.sender),
+            "Not authorized"
+        );
 
         _tokenApprovals[tokenId] = to;
         emit Approval(owner, to, tokenId);
@@ -59,13 +81,21 @@ contract MyNFT {
         emit ApprovalForAll(msg.sender, operator, approved);
     }
 
-    function isApprovedForAll(address owner, address operator) public view returns (bool) {
+    function isApprovedForAll(
+        address owner,
+        address operator
+    ) public view returns (bool) {
         return _operatorApprovals[owner][operator];
     }
 
     function transferFrom(address from, address to, uint256 tokenId) public {
         require(from == ownerOf(tokenId), "Transfer not authorized by owner");
-        require(msg.sender == from || msg.sender == getApproved(tokenId) || isApprovedForAll(from, msg.sender), "Not authorized");
+        require(
+            msg.sender == from ||
+                msg.sender == getApproved(tokenId) ||
+                isApprovedForAll(from, msg.sender),
+            "Not authorized"
+        );
         require(to != address(0), "Cannot transfer to the zero address");
 
         _approve(address(0), tokenId);
@@ -90,6 +120,69 @@ contract MyNFT {
         emit Transfer(address(0), to, newTokenId);
 
         return newTokenId;
+    }
+
+    function mintTextNFT(
+        address to,
+        string memory text
+    ) public returns (uint256) {
+        require(to != address(0), "Cannot mint to the zero address");
+        require(bytes(text).length > 0, "Text cannot be empty");
+
+        _tokenIds++;
+        uint256 newTokenId = _tokenIds;
+
+        _owners[newTokenId] = to;
+        _balances[to] += 1;
+
+        // テキストメタデータの保存
+        _textMetadata[newTokenId] = TextNFTMetadata({
+            text: text,
+            timestamp: block.timestamp
+        });
+
+        emit Transfer(address(0), to, newTokenId);
+
+        return newTokenId;
+    }
+
+    function getTextNFTMetadata(
+        uint256 tokenId
+    ) public view returns (TextNFTMetadata memory) {
+        require(_owners[tokenId] != address(0), "Token does not exist");
+        return _textMetadata[tokenId];
+    }
+
+    function getOwnedTextNFTs(
+        address owner
+    ) public view returns (TextNFTMetadata[] memory) {
+        uint256 balance = _balances[owner];
+
+        // まず所有しているテキストNFTの数をカウント
+        uint256 textNFTCount = 0;
+        for (uint256 i = 1; i <= _tokenIds; i++) {
+            if (
+                _owners[i] == owner && bytes(_textMetadata[i].text).length > 0
+            ) {
+                textNFTCount++;
+            }
+        }
+
+        // テキストNFTのメタデータ配列を作成
+        TextNFTMetadata[] memory textNFTs = new TextNFTMetadata[](textNFTCount);
+        uint256 currentIndex = 0;
+
+        // テキストNFTのメタデータを収集
+        for (uint256 i = 1; i <= _tokenIds; i++) {
+            if (
+                _owners[i] == owner && bytes(_textMetadata[i].text).length > 0
+            ) {
+                textNFTs[currentIndex] = _textMetadata[i];
+                currentIndex++;
+            }
+        }
+
+        return textNFTs;
     }
 
     function _approve(address to, uint256 tokenId) internal {
