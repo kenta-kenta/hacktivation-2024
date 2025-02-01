@@ -10,7 +10,7 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-200">
       <Header />
       <main className="container mx-auto px-4 pt-20 pb-8">{children}</main>
       <Footer />

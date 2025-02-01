@@ -11,7 +11,7 @@ export const TextNFTList = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">テキストNFT一覧</h2>
+        <h2 className="text-2xl font-bold">いままでの日記</h2>
         <button
           onClick={() => getOwnedTextNFTs()}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

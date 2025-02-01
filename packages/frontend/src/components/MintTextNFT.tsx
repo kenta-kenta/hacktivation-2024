@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNFTContract } from "../hooks/nft";
 
 export const MintTextNFT = () => {
-  const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [mintError, setMintError] = useState<string | null>(null);
@@ -11,14 +10,13 @@ export const MintTextNFT = () => {
 
   const handleMint = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !text.trim()) return;
+    if (!text.trim()) return;
 
     setIsProcessing(true);
     setMintError(null);
 
     try {
-      await mintTextNFT(text, title);
-      setTitle("");
+      await mintTextNFT(text);
       setText("");
     } catch (error) {
       setMintError(
@@ -34,17 +32,6 @@ export const MintTextNFT = () => {
       <h2 className="text-2xl font-bold mb-4">日記を書く</h2>
 
       <form onSubmit={handleMint} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">タイトル</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border rounded"
-            disabled={isProcessing}
-          />
-        </div>
-
         <div>
           <label className="block text-sm font-medium mb-1">内容</label>
           <textarea

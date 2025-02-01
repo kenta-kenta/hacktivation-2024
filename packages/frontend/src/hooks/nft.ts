@@ -17,7 +17,7 @@ export const useNFTContract = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const nftAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+  const nftAddress = "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707";
 
   useEffect(() => {
     const init = async () => {
@@ -42,31 +42,13 @@ export const useNFTContract = () => {
     init();
   }, []);
 
-  const mintNFT = async () => {
+  const mintTextNFT = async (text: string) => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(nftAddress, nftAbi, signer);
       
-      const tx = await contract.mint(address, "test");
-      const receipt = await tx.wait();
-      
-      const event = receipt.logs[0];
-      const tokenId = event.args[2];
-      setCurrentTokenId(Number(tokenId));
-    } catch (error) {
-      console.error("Mint error:", error);
-      throw error;
-    }
-  };
-
-  const mintTextNFT = async (text: string, title: string) => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const contract = new ethers.Contract(nftAddress, nftAbi, signer);
-      
-      const tx = await contract.mintTextNFT(address, text, title);
+      const tx = await contract.mintTextNFT(address, text);
       const receipt = await tx.wait();
       
       const event = receipt.logs[0];
@@ -102,7 +84,6 @@ export const useNFTContract = () => {
     balance,
     isLoading,
     error,
-    mintNFT,
     mintTextNFT,
     getOwnedTextNFTs,
     textNFTs,

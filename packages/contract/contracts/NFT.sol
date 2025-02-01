@@ -15,7 +15,6 @@ contract MyNFT {
 
     struct TextNFTMetadata {
         string text;
-        string title;
         uint256 timestamp;
     }
 
@@ -125,8 +124,7 @@ contract MyNFT {
 
     function mintTextNFT(
         address to,
-        string memory text,
-        string memory title
+        string memory text
     ) public returns (uint256) {
         require(to != address(0), "Cannot mint to the zero address");
         require(bytes(text).length > 0, "Text cannot be empty");
@@ -140,7 +138,6 @@ contract MyNFT {
         // テキストメタデータの保存
         _textMetadata[newTokenId] = TextNFTMetadata({
             text: text,
-            title: title,
             timestamp: block.timestamp
         });
 

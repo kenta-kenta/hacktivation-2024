@@ -153,11 +153,6 @@
             "type": "string"
           },
           {
-            "internalType": "string",
-            "name": "title",
-            "type": "string"
-          },
-          {
             "internalType": "uint256",
             "name": "timestamp",
             "type": "uint256"
@@ -186,11 +181,6 @@
           {
             "internalType": "string",
             "name": "text",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "title",
             "type": "string"
           },
           {
@@ -265,11 +255,6 @@
       {
         "internalType": "string",
         "name": "text",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "title",
         "type": "string"
       }
     ],

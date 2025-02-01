@@ -10,7 +10,7 @@ const Header = () => {
             href="/"
             className="text-blue-500 hover:text-blue-800 px-3 py-2 rounded-md text-m font-medium"
           >
-            日記
+            Memoria
           </Link>
           <div className="flex space-x-4">
             <Link
