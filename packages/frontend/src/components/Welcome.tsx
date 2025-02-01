@@ -14,9 +14,7 @@ const Welcome: React.FC = () => {
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
           Memoriaへようこそ！
         </h1>
-        <p className="text-gray-600">
-          あなたの思い出をNFTとして永遠に残しませんか？
-        </p>
+        <p className="text-gray-600">NFTを利用した交換日記</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-lg p-6">
@@ -63,7 +61,7 @@ const Welcome: React.FC = () => {
             </div>
             <div className="flex items-center space-x-3">
               <UserGroupIcon className="h-6 w-6 text-teal-500" />
-              <span>コミュニティと共有可能</span>
+              <span>別のユーザーと交換できる</span>
             </div>
           </div>
         </div>

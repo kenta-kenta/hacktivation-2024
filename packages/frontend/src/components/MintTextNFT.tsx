@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNFTContract } from "../hooks/nft";
 
+// 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+
 export const MintTextNFT = () => {
   const [text, setText] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [mintError, setMintError] = useState<string | null>(null);
+  const [tagInput, setTagInput] = useState<string>("");
 
   const { mintTextNFT, currentTokenId } = useNFTContract();
 
@@ -16,7 +20,7 @@ export const MintTextNFT = () => {
     setMintError(null);
 
     try {
-      await mintTextNFT(text);
+      await mintTextNFT(text, tags);
       setText("");
     } catch (error) {
       setMintError(
@@ -25,6 +29,17 @@ export const MintTextNFT = () => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleAddTag = () => {
+    if (tagInput.trim()) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (indexToRemove: number) => {
+    setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -41,6 +56,47 @@ export const MintTextNFT = () => {
             rows={4}
             disabled={isProcessing}
           />
+          <label className="block text-sm text-gray-500 mt-1">タグ</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              className="w-full p-2 border rounded"
+              disabled={isProcessing}
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddTag();
+                }
+              }}
+            />
+            <button
+              type="button"
+              onClick={handleAddTag}
+              disabled={isProcessing}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 disabled:opacity-50"
+            >
+              追加
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {tags.map((tag, index) => (
+              <span
+                key={index}
+                className="bg-gray-200 px-2 py-1 rounded-full text-sm flex items-center"
+              >
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => removeTag(index)}
+                  className="ml-1 text-gray-500 hover:text-gray-700"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
 
         {mintError && <p className="text-red-500 text-sm">{mintError}</p>}

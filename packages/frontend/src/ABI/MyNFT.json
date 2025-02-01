@@ -148,6 +148,11 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
             "internalType": "string",
             "name": "text",
             "type": "string"
@@ -156,6 +161,11 @@
             "internalType": "uint256",
             "name": "timestamp",
             "type": "uint256"
+          },
+          {
+            "internalType": "string[]",
+            "name": "tags",
+            "type": "string[]"
           }
         ],
         "internalType": "struct MyNFT.TextNFTMetadata[]",
@@ -179,6 +189,11 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
             "internalType": "string",
             "name": "text",
             "type": "string"
@@ -187,6 +202,11 @@
             "internalType": "uint256",
             "name": "timestamp",
             "type": "uint256"
+          },
+          {
+            "internalType": "string[]",
+            "name": "tags",
+            "type": "string[]"
           }
         ],
         "internalType": "struct MyNFT.TextNFTMetadata",
@@ -256,6 +276,11 @@
         "internalType": "string",
         "name": "text",
         "type": "string"
+      },
+      {
+        "internalType": "string[]",
+        "name": "tags",
+        "type": "string[]"
       }
     ],
     "name": "mintTextNFT",
@@ -370,6 +395,29 @@
       }
     ],
     "name": "transferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "transferTextNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
