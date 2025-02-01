@@ -38,6 +38,20 @@ describe("MyNFT", function () {
     });
   });
 
+  describe("Minting TextNFT", function () {
+    it("Should mint a new text NFT and store metadata correctly", async function () {
+      const { myNFT, owner } = await loadFixture(deployMyNFTFixture);
+
+      await myNFT.write.mintTextNFT([owner.account.address, "test"]);
+
+      expect(await myNFT.read.balanceOf([owner.account.address])).to.equal(BigInt(1));
+      expect(await myNFT.read.ownerOf([BigInt(1)])).to.equal(getAddress(owner.account.address));
+
+      const metadata = await myNFT.read.getTextNFTMetadata([BigInt(1)]);
+      expect(metadata.text).to.equal("test");
+    })
+  })
+
   describe("Transfers", function () {
     it("Should transfer token between accounts", async function () {
       const { myNFT, owner, addr1 } = await loadFixture(deployMyNFTFixture);
