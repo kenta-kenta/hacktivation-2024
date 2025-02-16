@@ -1,50 +1,73 @@
-# Hacktivation-2024 Setup Guide
+# Memorial
 
-This guide provides step-by-step instructions to set up the environment for the Hacktivation-2024 project.
+## 概要
 
-**Install Node.js Dependencies:**
-At the root of the project, run the following command to install all required dependencies:
-```bash
-npm install
-```
+このプロジェクトは、ブロックチェーンのハッカソンに参加したときに作成した Dapps である．交換日記をテーマにして日記を送ることができるようにした
 
-## 1. Contract Development
-Navigate to the `packages/contract` directory.
+## 特徴
 
-### Steps:
-1. **Write Your Contract:**
-   - Write your smart contract files in this directory.
+- 日記の送信機能：相手のアドレスを入力すれば NFT 化した日記を送れるようにした
 
-2. **Create a Deployment Script:**
-   - Write your deployment script in `scripts/deploy.ts`.
+## 使用技術
 
-3. **Start the Local Node:**
+- 言語: JavaScript / TypeScript, Solidity
+- フロントエンド: React, Next.js, Tailwind CSS
+- バックエンド/スマートコントラクト: Hardhat, ethers.js
+- その他: Git
+
+## 開発環境
+
+- OS: [WindowsOS，WSL2]
+- エディタ: [VS Code, etc.]
+
+## セットアップ
+
+### frontend
+
+1. ディレクトリに移動:
    ```bash
-   npm run node
+   cd packages/frontend
    ```
-
-4. **Deploy the Contract:**
-   - Deploy the contract to the local network using the following command:
-     ```bash
-     npm run deploy -- --network localhost
-     ```
-   - Note down the contract address displayed in the console after deployment.
-
-## 2. Frontend Setup
-Navigate to the `packages/frontend` directory.
-
-### Steps:
-1. **Import the Local Node Account into MetaMask:**
-   - Open MetaMask and import the private key of the first account displayed by the local node.
-
-2. **Add Localhost Network to MetaMask:**
-   - Configure MetaMask to connect to the localhost network.
-
-3. **Start the Frontend Application:**
+2. 依存関係をインストール:
+   ```bash
+   npm install
+   ```
+3. 開発サーバーを起動:
    ```bash
    npm run dev
    ```
 
----
+### backend/contract
 
-Now you have both the backend (smart contract) and frontend environments running for Hacktivation-2024. Happy hacking!
+1. ディレクトリに移動:
+
+   ```bash
+   cd package/contract
+   ```
+
+2. 依存関係をインストール
+
+   ```bash
+   npm install
+   ```
+
+3. ノード通信を開始
+
+   ```bash
+   npm run node
+   ```
+
+4. デプロイ
+
+   ```bash
+   npm run deploy -- --network localhost
+   ```
+
+5. フロントエンドとの接続
+   - /packages/contract/artifacts/contracts/NFT.sol にある MyNFT.json の abi をコピーして，/packages/frontend/src/ABI/MyNFT.json にペースト
+   - hooks/nft.ts にデプロイ先のアドレスを貼り付ける
+
+## 学んだこと・振り返り
+
+- 技術的チャレンジ: はじめて Dapps 開発を行った．コントラクトとフロントエンドの接続が難しかった
+- 工夫した点: 日記を NFT として保存して相手に送信できるようにした．
